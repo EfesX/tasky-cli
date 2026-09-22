@@ -5,7 +5,7 @@ use chrono::offset::Utc;
 use colored::*;
 
 pub fn add_task(tasks: &mut Vec<Task>, text: String, date_string: Option<String>, file: &str) {
-    let date = date_string.unwrap_or_else(|| "".to_string()); // empty if none provided
+    let date = date_string.unwrap_or_default(); // empty if none provided
     let new_task = Task::new(text.clone(), date.clone());
     tasks.push(new_task.clone());
     save_tasks_to_file(tasks, file);
@@ -54,7 +54,7 @@ pub fn remove_task(tasks: &mut Vec<Task>, index: usize, file: &str) {
     }
 }
 
-pub fn done_task(tasks: &mut Vec<Task>, index: usize, file: &str) {
+pub fn done_task(tasks: &mut [Task], index: usize, file: &str) {
     if index < tasks.len() {
         tasks[index].mark_done();
         save_tasks_to_file(tasks, file);
@@ -64,7 +64,7 @@ pub fn done_task(tasks: &mut Vec<Task>, index: usize, file: &str) {
     }
 }
 
-pub fn edit_task(tasks: &mut Vec<Task>, index: usize, new_text: String, file: &str) {
+pub fn edit_task(tasks: &mut [Task], index: usize, new_text: String, file: &str) {
     if index < tasks.len() {
         let old_text = tasks[index].text.clone();
         tasks[index].text = new_text.clone();
